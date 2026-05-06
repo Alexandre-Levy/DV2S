@@ -27,7 +27,7 @@ Autonomous vehicles (AVs) face driving scenarios ranging from routine traffic to
 ---
 
 <p align="center">
-  <video src="videos/DV2S.gif" controls autoplay muted loop width="800"></video>
+  <video src="videos/DV2S.mp4" controls autoplay muted loop width="800"/>
 </p>
 
 ---
