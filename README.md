@@ -24,6 +24,8 @@ Autonomous vehicles (AVs) face driving scenarios ranging from routine traffic to
   <img src="imgs/paper_xai_flow.png" alt="D-V2S Pipeline" width="800"/>
 </p>
 
+---
+
 <p align="center">
   <video src="videos/DV2S.mp4" controls autoplay muted loop width="800"></video>
 </p>
