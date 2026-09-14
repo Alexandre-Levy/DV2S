@@ -78,10 +78,6 @@ Survey-Scenario-generation/     Gradio app (deployed as a Hugging Face Space) us
                                  human evaluation survey of generated scenarios
 ```
 
-`LLaVA-NeXT/` and `Qwen-VL/` are included as self-contained, locally modified checkouts of the
-upstream projects (each keeps its own `README.md` and `LICENSE`) — they were used as
-video-LLM / VLM baselines for the DRA stage and are independent of `scripts/`.
-
 ### Setup
 
 ```bash
