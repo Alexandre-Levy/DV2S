@@ -1,0 +1,27 @@
+Here is a new description and I want you to fill this SCENIC code following the examples without puting any behavior to the ego vehicle:
+Description:  
+***DESCRIPTION_TO_REPLACE*** 
+Code:
+Town = "Town05"
+
+param map = localPath(f'../maps/{Town}.xodr') 
+param carla_map = Town
+model scenic.simulators.carla.model
+EGO_MODEL = "vehicle.lincoln.mkz_2017"
+
+***
+PUT CODE FOR OTHER ACTORS BEHAVIOUR HERE
+***
+
+***
+PARAMETERS SCENARIO
+***
+
+ego = Car at EgoSpawnPt,
+    with rolename "hero",
+    with regionContainedIn None,
+    with blueprint EGO_MODEL
+    
+***
+OTHER ACTORS HERE
+***

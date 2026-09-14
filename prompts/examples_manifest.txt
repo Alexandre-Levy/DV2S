@@ -1,0 +1,5 @@
+bypass_blocking_object.scenic
+left_turn_highway_broadside.scenic
+left_turn_oncoming_truck.scenic
+pedestrian_dart_from_bus_stop.scenic
+left_turn_pedestrian_crossing.scenic

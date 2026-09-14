@@ -1,0 +1,3 @@
+The ego vehicle is on the highway and it is surrounded by four vehicles .
+An accident occurred on the highway on the central lane of the highway. The ego car arrives to the accident site and needs to switch to left or right lane to avoid it.
+The ego vehicle needs to overpass two bycicles that are going slowly and blocking the lane.

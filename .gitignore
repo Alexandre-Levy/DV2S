@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.ipynb_checkpoints/
+
+# Environments
+.venv/
+venv/
+.env
+
+# OS
+.DS_Store
+
+# Editor (local machine config, e.g. absolute local paths)
+.vscode/
+
+# Vendored build dependency (not part of this paper's code; reinstall via pip if needed)
+LLaVA-NeXT/bitsandbytes/

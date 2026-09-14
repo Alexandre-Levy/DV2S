@@ -1,0 +1,133 @@
+SCENIC AUTHORING GUIDELINES (CARLA DOMAIN)
+
+The following conventions constrain how a Scenic scenario script must be written
+for the CARLA simulator. Adhere to them exactly. 
+
+
+1. WORLD MODEL AND IMPORTS
+   - Declare the world model as, and only as:
+         model scenic.simulators.carla.model
+   - Do not add any other import or model statement.
+
+
+2. CONSTRUCTS THAT DO NOT EXIST (NEVER USE)
+   - CrossingAction(...) and CrossRoadAction()      -- not defined.
+   - Vector2                                        -- not a type.
+   - The `pass` statement                           -- not supported.
+   - `wait <X> seconds`                             -- invalid syntax; see section 7.
+   - The specifiers "along left" and "along right"  -- not valid.
+   - Attribute Lane.forwardDir                      -- does not exist.
+   - Attribute Lane.orientation                     -- do not use; use roadDirection (section 4).
+
+
+3. ACTORS
+   - The only classes available to instantiate actors are:
+
+         ATM, Advertisement, Barrel, Barrier, Bench, Bicycle, Box, Bus, BusStop,
+         Car, CarlaActor, Case, Chair, Cone, Container, CreasedBox, Debris,
+         Garbage, Gnome, IronPlate, Kiosk, Mailbox, Motorcycle, NPCCar,
+         Pedestrian, PlantPot, Prop, Table, TrafficWarning, Trash, Truck, Van,
+         Vehicle, VendingMachine
+
+   - Available blueprints are listed in blueprints.scenic; available actor
+     types are listed in models.scenic.
+   - The `with velocity` specifier is not available when defining an actor.
+
+
+4. POSITIONING, HEADINGS, AND roadDirection
+   - roadDirection is a built-in vector field. Never assign to it and never
+     redefine it as a variable.
+   - After a `following` expression, do not read EgoSpawnPt.heading or
+     lane.centerline; refer to roadDirection instead. For example:
+
+         CrossingPt = OrientedPoint following roadDirection from EgoSpawnPt
+                      for OPT_PED_CROSSING_DISTANCE
+
+
+5. OFFSETS AND THE SHIFT CONVENTION
+   - Lateral sign convention: a negative X offset is to the left, a positive X
+     offset is to the right.
+   - Define a shift as `SHIFT = <x> @ <y>` and apply it with
+     `<point> offset along <heading> by SHIFT`, where <heading> must be a
+     heading or a vector field.
+   - The following are all invalid ways to offset a point or an actor:
+
+         EgoSpawnPt.offset(along_lane=-10)
+         EgoSpawnPt.offsetBy(...)
+         egoTrajectory.offset(shift1)
+         EgoSpawnPt.goAlong(egoTrajectory, d) + OrientedPoint.offset(...)
+
+   - Spawn points expose no positioning helper methods, including .offset(),
+     .offsetAlongRightBy(), .goingForward(), and .offset_by().
+
+
+6. SPAWNING ACTORS
+   - Use only the spawning forms shown in the examples.
+   - Canonical form:
+
+         Actor = Pedestrian at <point> offset along <heading> by SHIFT
+
+   - Pedestrian, offset from the end-lane point (e.g. to appear after a turn):
+
+         SHIFT = OPT_GEO_X_DISTANCE @ OPT_GEO_Y_DISTANCE
+         AdvAgent = Pedestrian at endLanePt offset along endLanePt.heading by SHIFT
+
+   - Pedestrian, full specification with a crossing behavior:
+
+         pedLtoR = Pedestrian at crossingPt offset along roadDirection
+                       by (OPT_PED_LEFT_OFFSET, OPT_PED_LEFT_DIST),
+                   with heading crossingPt.heading - 90 deg,
+                   with regionContainedIn None,
+                   with behavior LeftToRightCrossing()
+
+
+7. BEHAVIORS
+   - Express an idle / blocking behavior through a dedicated behavior; never
+     write `wait <X> seconds` directly:
+
+         behavior WaitBehavior():
+             wait
+
+         behavior OtherCarBehavior():
+             do WaitBehavior() for 10 seconds
+
+   - To make the ego change into its current lane:
+
+         do LaneChangeBehavior(network.laneSectionAt(ego))
+
+   - LaneChangeBehavior takes a LaneSection argument, not a Lane.
+
+
+8. LANES VERSUS LANE SECTIONS
+   - Do not index the lane collection (network.lanes[0]) and do not compare
+     lanes with == or != (for example, `network.lane != ego_lane` is invalid).
+   - _laneToLeft and _laneToRight are attributes of a LaneSection, not of a Lane.
+   - When several vehicles are involved, operate on lane sections rather than
+     lanes.
+   - To select a lane section whose left neighbor runs in the opposite
+     direction:
+
+         laneSecsWithLeftLane = []
+         for lane in network.lanes:
+             for laneSec in lane.sections:
+                 if laneSec._laneToLeft is not None:
+                     if laneSec._laneToLeft.isForward is not laneSec.isForward:
+                         laneSecsWithLeftLane.append(laneSec)
+
+
+9. TRAJECTORIES
+   - A trajectory is an ordered list of lanes, from start lane through the
+     connecting lane to the end lane:
+
+         [ego_maneuver.startLane, ego_maneuver.connectingLane, ego_maneuver.endLane]
+
+
+10. RECIPES
+   - Parking spots (shoulder regions that have an adjacent sidewalk):
+
+         parkingSpots = []
+         for lane in network.lanes:
+             laneGroup = lane.group
+             if laneGroup._shoulder is not None and laneGroup._sidewalk is not None:
+                 parkingSpots.append(laneGroup.shoulder)
+         lane = Uniform(*parkingSpots)
