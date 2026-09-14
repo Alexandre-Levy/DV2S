@@ -2,7 +2,7 @@
 
 *D-V2S: Driving Video to Scenario*
 
-**[ITSC 2026]** | [Project Page](https://alexandre-levy.github.io/DV2S.github.io/) | Paper (coming soon)
+**[ITSC 2026]** | [Project Page](https://alexandre-levy.github.io/DV2S.github.io/) | [Paper]([https://alexandre-levy.github.io/DV2S.github.io/](https://arxiv.org/abs/2606.21993))
 
 ---
 
